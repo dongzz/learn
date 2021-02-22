@@ -1,0 +1,41 @@
+spring:
+  datasource:
+    master:
+      url: jdbc:mysql://localhost:3306/test?useSSL=true&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxPoolPreparedStatementsPerConnectionSize: 20
+      useGlobalDataSourceStat: true
+    slave:
+      url: jdbc:mysql://localhost:3307/test?useSSL=true&useUnicode=true&characterEncoding=utf8&allowMultiQueries=true
+      username: root
+      password: 123456
+      driver-class-name: com.mysql.cj.jdbc.Driver
+      connectionProperties: druid.stat.mergeSql=true;druid.stat.slowSqlMillis=5000
+      initialSize: 5
+      minIdle: 5
+      maxActive: 20
+      maxWait: 60000
+      timeBetweenEvictionRunsMillis: 60000
+      minEvictableIdleTimeMillis: 300000
+      validationQuery: SELECT 1 FROM DUAL
+      testWhileIdle: true
+      testOnBorrow: false
+      testOnReturn: false
+      poolPreparedStatements: true
+      maxPoolPreparedStatementsPerConnectionSize: 20
+      useGlobalDataSourceStat: true
+    type: com.alibaba.druid.pool.DruidDataSource
