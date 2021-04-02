@@ -4,3 +4,16 @@
 -   mysql
 -   mybatis
 -   druid
+
+# alibaba
+    springcloud alibaba 
+-   Nacos
+
+# lock-upgrade
+    锁升级
+
+# IO
+    BIO NIO AIO
+
+# auth
+    spring security
