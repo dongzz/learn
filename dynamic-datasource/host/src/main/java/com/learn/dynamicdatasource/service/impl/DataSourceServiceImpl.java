@@ -17,8 +17,7 @@ import java.sql.SQLException;
  *
  */
 @Service("dataSourceServiceImpl")
-public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DynamicDataSource>
-implements DataSourceService{
+public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DynamicDataSource> implements DataSourceService{
 
     @Resource
     DataSourceMapper dataSourceMapper;
@@ -36,9 +35,17 @@ implements DataSourceService{
         return this.save(dataSource);
     }
 
+    @Override
+    public boolean remove(String name) {
+        QueryWrapper<DynamicDataSource> qw = new QueryWrapper<>();
+        qw.eq("name", name);
+        Assert.isTrue(this.remove(qw), "数据源移除失败");
+        return true;
+    }
+
     private boolean checkDataSource(DataSourceDTO dto) {
         try {
-            DriverManager.getConnection(dto.getUrl(), dto.getName(), dto.getPassword());
+            DriverManager.getConnection(dto.getUrl(), dto.getUsername(), dto.getPassword());
         } catch (SQLException e) {
             log.error(String.format("数据源配置 %s , 获取链接失败", dto.getUrl()), e);
             return false;

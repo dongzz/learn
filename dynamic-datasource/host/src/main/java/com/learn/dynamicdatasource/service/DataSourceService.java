@@ -10,4 +10,6 @@ import com.learn.dynamicdatasource.entities.dto.DataSourceDTO;
 public interface DataSourceService extends IService<DynamicDataSource> {
 
     boolean save(DataSourceDTO dto);
+
+    boolean remove(String name);
 }
