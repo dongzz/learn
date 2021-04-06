@@ -3,6 +3,7 @@ package com.learn.dynamicdatasource.controller;
 import com.baomidou.dynamic.datasource.creator.DefaultDataSourceCreator;
 import com.baomidou.dynamic.datasource.provider.DynamicDataSourceProvider;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
+import com.learn.dynamicdatasource.entities.DynamicDataSource;
 import com.learn.dynamicdatasource.entities.dto.DataSourceDTO;
 import com.learn.dynamicdatasource.service.DataSourceService;
 import com.learn.dynamicdatasource.tools.Res;
@@ -18,6 +19,7 @@ import javax.sql.DataSource;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -44,7 +46,7 @@ public class DataSourceController {
     @GetMapping("/list")
     @ApiOperation("获取当前所有数据源")
     public Res list() {
-        Set<String> list = dynamicDataSourceProvider.loadDataSources().keySet();
+        List<DynamicDataSource> list = dataSourceService.list();
         return Res.success(list);
     }
 

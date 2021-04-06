@@ -2,7 +2,7 @@ package com.learn.dynamicdatasource.service.impl;
 
 import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
-import com.learn.dynamicdatasource.entities.DataSource;
+import com.learn.dynamicdatasource.entities.DynamicDataSource;
 import com.learn.dynamicdatasource.entities.dto.DataSourceDTO;
 import com.learn.dynamicdatasource.service.DataSourceService;
 import com.learn.dynamicdatasource.mapper.DataSourceMapper;
@@ -17,7 +17,7 @@ import java.sql.SQLException;
  *
  */
 @Service("dataSourceServiceImpl")
-public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DataSource>
+public class DataSourceServiceImpl extends ServiceImpl<DataSourceMapper, DynamicDataSource>
 implements DataSourceService{
 
     @Resource
@@ -27,7 +27,7 @@ implements DataSourceService{
     public boolean save(DataSourceDTO dto) {
         Assert.isTrue(checkName(dto.getPollName()), "数据源名称重复");
         Assert.isTrue(checkDataSource(dto), "数据库连接失败");
-        DataSource dataSource = new DataSource();
+        DynamicDataSource dataSource = new DynamicDataSource();
         dataSource.setName(dto.getPollName());
         dataSource.setDriver(dto.getDriverClassName());
         dataSource.setUrl(dto.getUrl());
@@ -47,9 +47,9 @@ implements DataSourceService{
     }
 
     private boolean checkName(String name) {
-        QueryWrapper<DataSource> qw = new QueryWrapper<>();
+        QueryWrapper<DynamicDataSource> qw = new QueryWrapper<>();
         qw.eq("name", name);
-        DataSource one = this.getOne(qw);
+        DynamicDataSource one = this.getOne(qw);
         return one == null;
     }
 }

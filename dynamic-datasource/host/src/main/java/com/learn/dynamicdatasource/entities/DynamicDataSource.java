@@ -12,7 +12,7 @@ import lombok.Data;
  */
 @TableName(value ="data_source")
 @Data
-public class DataSource implements Serializable {
+public class DynamicDataSource implements Serializable {
     /**
      * 
      */
