@@ -11,7 +11,7 @@ module.exports = {
         hotOnly: true, // 热更新
         proxy: { //配置多个代理
             "/api": {
-                target: "http://127.0.0.1:8080",
+                target: "http://127.0.0.1:8081",
                 changeOrigin: true,
                 ws: true,//websocket支持
                 secure: false,

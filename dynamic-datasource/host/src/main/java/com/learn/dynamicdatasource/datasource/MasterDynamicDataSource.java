@@ -46,7 +46,7 @@ public class MasterDynamicDataSource {
                     property.setPassword(password);
                     property.setUrl(url);
                     property.setDriverClassName(driver);
-                    map.put(name, property);
+                    map.put("my_" + name, property);
                 }
                 // 添加当前数据源
                 DataSourceProperty property = new DataSourceProperty();

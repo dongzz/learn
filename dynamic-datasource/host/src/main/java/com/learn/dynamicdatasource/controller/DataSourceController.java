@@ -5,6 +5,7 @@ import com.baomidou.dynamic.datasource.provider.DynamicDataSourceProvider;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
 import com.learn.dynamicdatasource.entities.dto.DataSourceDTO;
 import com.learn.dynamicdatasource.service.DataSourceService;
+import com.learn.dynamicdatasource.tools.Res;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
 import org.springframework.beans.BeanUtils;
@@ -42,8 +43,9 @@ public class DataSourceController {
 
     @GetMapping("/list")
     @ApiOperation("获取当前所有数据源")
-    public Set<String> now() {
-        return dynamicDataSourceProvider.loadDataSources().keySet();
+    public Res list() {
+        Set<String> list = dynamicDataSourceProvider.loadDataSources().keySet();
+        return Res.success(list);
     }
 
     @PostMapping("/add")
@@ -52,7 +54,6 @@ public class DataSourceController {
         DataSourceProperty dataSourceProperty = new DataSourceProperty();
         BeanUtils.copyProperties(dto, dataSourceProperty);
         DataSource dataSource = dataSourceCreator.createDataSource(dataSourceProperty);
-
         Assert.isTrue(dataSourceService.save(dto), "数据源存储失败");
         dynamicDataSourceProvider.loadDataSources().put(dto.getPollName(), dataSource);
         return dynamicDataSourceProvider.loadDataSources().keySet();
