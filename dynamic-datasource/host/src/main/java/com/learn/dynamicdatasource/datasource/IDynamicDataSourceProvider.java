@@ -1,7 +1,6 @@
 package com.learn.dynamicdatasource.datasource;
 
 import com.baomidou.dynamic.datasource.provider.AbstractDataSourceProvider;
-import com.baomidou.dynamic.datasource.provider.AbstractJdbcDataSourceProvider;
 import com.baomidou.dynamic.datasource.provider.DynamicDataSourceProvider;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
 import com.learn.dynamicdatasource.config.DynamicDataSourceConfig;
@@ -26,22 +25,23 @@ import java.util.Map;
  */
 @Slf4j
 @Component
-public class MasterDynamicDataSource extends AbstractDataSourceProvider {
+public class IDynamicDataSourceProvider extends AbstractDataSourceProvider {
+    final static String dynamicDatasourcePrefix = "my_";
+    final static String masterDatasource = "master";
 
     @Resource
     DynamicDataSourceConfig dynamicDataSourceConfig;
 
-    Map<String, DataSource> dataSourceMap = null;
+    static Map<String, DataSource> dataSourceMap = null;
 
     @Bean(name = "dynamicDataSourceProvider")
     public DynamicDataSourceProvider dynamicDataSourceProvider() {
-        return new MasterDynamicDataSource();
+        return new IDynamicDataSourceProvider();
     }
 
     @Override
     public Map<String, DataSource> loadDataSources() {
-        if (dataSourceMap == null) {
-            dataSourceMap = new HashMap<>();
+        if (dataSourceMap.isEmpty()) {
             Connection conn = null;
             Statement stmt = null;
             try {
@@ -66,8 +66,20 @@ public class MasterDynamicDataSource extends AbstractDataSourceProvider {
         return dataSourceMap;
     }
 
+    public DataSource put(String name, DataSource dataSource) {
+        return dataSourceMap.put(dynamicDatasourcePrefix + name, dataSource);
+    }
+
+    public DataSource get(String name) {
+        return dataSourceMap.get(masterDatasource.equals(name) ? name : (dynamicDatasourcePrefix + name));
+    }
+
+    public DataSource remove(String name) {
+        return dataSourceMap.remove(masterDatasource.equals(name) ? name : (dynamicDatasourcePrefix + name));
+    }
+
     private Map<String, DataSourceProperty> executeStmt(Statement statement) throws SQLException {
-        log.info("111");
+        log.info("初始化数据源");
         ResultSet rs = statement.executeQuery(String.format("select * from %s", dynamicDataSourceConfig.getTableName()));
         Map<String, DataSourceProperty> map = new HashMap<>();
 
@@ -82,7 +94,7 @@ public class MasterDynamicDataSource extends AbstractDataSourceProvider {
             property.setPassword(password);
             property.setUrl(url);
             property.setDriverClassName(driver);
-            map.put("my_" + name, property);
+            map.put(dynamicDatasourcePrefix + name, property);
         }
         // 添加当前数据源
         DataSourceProperty property = new DataSourceProperty();
@@ -90,7 +102,7 @@ public class MasterDynamicDataSource extends AbstractDataSourceProvider {
         property.setPassword(dynamicDataSourceConfig.getPassword());
         property.setUrl(dynamicDataSourceConfig.getUrl());
         property.setDriverClassName(dynamicDataSourceConfig.getDriverClassName());
-        map.put("master", property);
+        map.put(masterDatasource, property);
 
         return map;
     }

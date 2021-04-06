@@ -1,8 +1,8 @@
 package com.learn.dynamicdatasource.controller;
 
 import com.baomidou.dynamic.datasource.creator.DefaultDataSourceCreator;
-import com.baomidou.dynamic.datasource.provider.DynamicDataSourceProvider;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
+import com.learn.dynamicdatasource.datasource.IDynamicDataSourceProvider;
 import com.learn.dynamicdatasource.entities.DynamicDataSource;
 import com.learn.dynamicdatasource.entities.dto.DataSourceDTO;
 import com.learn.dynamicdatasource.handler.DataSourceContextHolder;
@@ -22,7 +22,6 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
-import java.util.Set;
 
 /**
  * @author dz <895180729@qq.com>
@@ -36,8 +35,8 @@ import java.util.Set;
 @RequestMapping("/datasource")
 public class DataSourceController {
 
-    @Resource(name = "dynamicDataSourceProvider")
-    DynamicDataSourceProvider dynamicDataSourceProvider;
+    @Resource
+    IDynamicDataSourceProvider dynamicDataSource;
 
     @Resource
     DefaultDataSourceCreator dataSourceCreator;
@@ -48,7 +47,7 @@ public class DataSourceController {
     @GetMapping(value = "/list")
     @ApiOperation("获取当前所有数据源")
     public Res list() {
-        DataSourceContextHolder.setDataSource(dynamicDataSourceProvider.loadDataSources().get("my_3307"));
+        DataSourceContextHolder.setDataSource(dynamicDataSource.get("3307"));
         List<DynamicDataSource> list = dataSourceService.list();
         return Res.success(list);
     }
@@ -60,7 +59,7 @@ public class DataSourceController {
         BeanUtils.copyProperties(dto, dataSourceProperty);
         DataSource dataSource = dataSourceCreator.createDataSource(dataSourceProperty);
         Assert.isTrue(dataSourceService.save(dto), "数据源存储失败");
-        dynamicDataSourceProvider.loadDataSources().put("my_" + dto.getName(), dataSource);
+        dynamicDataSource.put(dto.getName(), dataSource);
         return Res.success("新增数据源成功");
     }
 
@@ -68,14 +67,14 @@ public class DataSourceController {
     @ApiOperation("删除数据源")
     public Res remove(String name) {
         dataSourceService.remove(name);
-        dynamicDataSourceProvider.loadDataSources().remove(name);
+        dynamicDataSource.remove(name);
         return Res.success("删除成功");
     }
 
     @PostMapping("/select")
     @ApiOperation("动态查询")
     public DataSource select(String source, String sql) throws SQLException {
-        DataSource dataSource = dynamicDataSourceProvider.loadDataSources().get(source);
+        DataSource dataSource = dynamicDataSource.get(source);
         if (dataSource == null) {
             return null;
         }
