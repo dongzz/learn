@@ -1,6 +1,7 @@
 package com.learn.dynamicdatasource.tools;
 
 import lombok.AllArgsConstructor;
+import lombok.Data;
 
 /**
  * @author dz <895180729@qq.com>
@@ -9,6 +10,7 @@ import lombok.AllArgsConstructor;
  * @Since 1.8
  * @Date 2021/4/6 2:52 下午
  */
+@Data
 @AllArgsConstructor
 public class Res {
     private Integer status;

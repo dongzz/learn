@@ -43,7 +43,7 @@ public class DataSourceController {
     @Resource(name = "dataSourceServiceImpl")
     DataSourceService dataSourceService;
 
-    @GetMapping("/list")
+    @GetMapping(value = "/list")
     @ApiOperation("获取当前所有数据源")
     public Res list() {
         List<DynamicDataSource> list = dataSourceService.list();
