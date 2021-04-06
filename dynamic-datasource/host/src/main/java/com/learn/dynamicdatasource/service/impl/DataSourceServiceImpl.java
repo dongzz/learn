@@ -25,10 +25,10 @@ implements DataSourceService{
 
     @Override
     public boolean save(DataSourceDTO dto) {
-        Assert.isTrue(checkName(dto.getPollName()), "数据源名称重复");
+        Assert.isTrue(checkName(dto.getName()), "数据源名称重复");
         Assert.isTrue(checkDataSource(dto), "数据库连接失败");
         DynamicDataSource dataSource = new DynamicDataSource();
-        dataSource.setName(dto.getPollName());
+        dataSource.setName(dto.getName());
         dataSource.setDriver(dto.getDriverClassName());
         dataSource.setUrl(dto.getUrl());
         dataSource.setUsername(dto.getUsername());
@@ -38,7 +38,7 @@ implements DataSourceService{
 
     private boolean checkDataSource(DataSourceDTO dto) {
         try {
-            DriverManager.getConnection(dto.getUrl(), dto.getPollName(), dto.getPassword());
+            DriverManager.getConnection(dto.getUrl(), dto.getName(), dto.getPassword());
         } catch (SQLException e) {
             log.error(String.format("数据源配置 %s , 获取链接失败", dto.getUrl()), e);
             return false;

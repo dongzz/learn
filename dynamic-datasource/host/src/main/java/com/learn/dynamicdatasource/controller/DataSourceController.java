@@ -57,7 +57,7 @@ public class DataSourceController {
         BeanUtils.copyProperties(dto, dataSourceProperty);
         DataSource dataSource = dataSourceCreator.createDataSource(dataSourceProperty);
         Assert.isTrue(dataSourceService.save(dto), "数据源存储失败");
-        dynamicDataSourceProvider.loadDataSources().put(dto.getPollName(), dataSource);
+        dynamicDataSourceProvider.loadDataSources().put(dto.getName(), dataSource);
         return dynamicDataSourceProvider.loadDataSources().keySet();
     }
 

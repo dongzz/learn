@@ -16,8 +16,8 @@ import javax.validation.constraints.NotBlank;
 public class DataSourceDTO {
 
     @NotBlank
-    @ApiModelProperty(value = "连接池名称", example = "3307")
-    private String pollName;
+    @ApiModelProperty(value = "连接池名称", example = "test")
+    private String name;
 
     @NotBlank
     @ApiModelProperty(value = "JDBC driver", example = "com.mysql.cj.jdbc.Driver")
