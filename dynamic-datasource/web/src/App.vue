@@ -1,6 +1,5 @@
 <template>
   <div id="app">
-    <layout/>
     <side-menu />
     <!-- 页面左侧二级菜单栏，和主体内容区域部分 -->
     <el-main>
@@ -10,11 +9,9 @@
 </template>
 
 <script>
-import Layout from "@/components/Layout";
 import SideMenu from "@/components/SideMenu";
 export default {
   components: {
-    Layout,
     SideMenu
   }
 }

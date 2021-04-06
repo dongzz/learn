@@ -1,6 +1,6 @@
 <template>
   <div class="SideMenu">
-
+    <layout :titles="titles"/>
     <!-- 一级菜单下面所拥有的二级菜单 -->
     <el-aside>
       <SideBar :items='items'></SideBar>
@@ -9,36 +9,26 @@
 </template>
 
 <script>
+import Layout from "@/components/Layout";
 import SideBar from "@/components/SideBar";
 export default {
   name: 'SideMenu',
   data() {
     return {
+      titles: [    // 水平一级菜单栏的菜单
+        {index: 'Home', title: '首页'},
+        {index: 'datasource', title: '数据库'},
+      ],
       items: [
         {
           index: 'test1-1',
           title: '二级菜单1-1'
         },
-        {
-          index: 'test1-2',
-          title: '二级菜单1-2'
-        },
-        {
-          index: 'test1-3',
-          title: '二级菜单1-3'
-        },
-        {
-          index: 'test1-4',
-          title: '二级菜单1-4'
-        },
-        {
-          index: 'test1-5',
-          title: '二级菜单1-5'
-        }
       ],
     }
   },
   components: {
+    Layout,
     SideBar
   },
   mounted() {

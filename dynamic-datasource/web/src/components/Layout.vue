@@ -6,7 +6,7 @@
       <!-- 水平一级菜单 -->
       <div style="float:left;">
         <el-menu :default-active="toIndex()" mode="horizontal" @select="handleSelect">
-          <template v-for="item in items">
+          <template v-for="item in titles">
             <el-menu-item :index="item.index" :key="item.index">
               <template slot="title">
                 <span slot="title">{{ item.title }}</span>
@@ -40,15 +40,11 @@
 <script>
 export default {
   name: 'Layout',
+  props: {
+    titles: Array
+  },
   data() {
     return {
-      items: [    // 水平一级菜单栏的菜单
-        {index: 'Home', title: '首页'},
-        {index: 'test1', title: '一级菜单1'},
-        {index: 'test2', title: '一级菜单2'},
-        {index: 'test3', title: '一级菜单3'},
-        {index: 'permission', title: '管理员权限'},
-      ]
     }
   },
   mounted() {
