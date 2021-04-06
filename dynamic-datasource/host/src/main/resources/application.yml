@@ -1,17 +1,28 @@
 server:
-  port: 8080
+  port: 8081
 
 spring:
   datasource:
-    url: jdbc:mysql://localhost:3306/dynamic
-    username: root
-    password: 123456
-    driver-class-name: com.mysql.cj.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
     druid: # 以下是独立参数，每个库可以重新设置
       stat-view-servlet:
         enabled: true
         loginUsername: admin
         loginPassword: 123456
+      filter:
+        stat:
+          enabled: true
+      web-stat-filter:
+        enabled: true
+    dynamic:
+      datasource:
+        master:
+          url: jdbc:mysql://localhost:3306/dynamic
+          username: root
+          password: 123456
+          driver-class-name: com.mysql.cj.jdbc.Driver # 3.2.0开始支持SPI可省略此配置
+          table-name: data_source
+      druid:
+        async-init: false
 
 
 

@@ -24,6 +24,7 @@
 </template>
 
 <script>
+import {getDatasource} from '@/api/datasource'
 export default {
   name: 'DataBase',
   data() {
@@ -64,8 +65,13 @@ export default {
   },
   methods: {
     init() {
-
+      this.initDatasource();
     },
+    initDatasource() {
+      getDatasource().then(res => {
+        debugger
+      })
+    }
   },
   beforeDestroy() {
 
