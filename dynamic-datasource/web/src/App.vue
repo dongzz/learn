@@ -31,11 +31,11 @@ html, body {
   color: #2c3e50;
   height: 100%;
   position: relative;
+  background-color: #eee;
 
   .el-main {
     height: 100%;
     padding: 80px 0 0 260px;
-    background-color: #eee;
   }
 }
 </style>

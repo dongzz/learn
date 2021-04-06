@@ -51,7 +51,7 @@ export default {
   display: block;
   position: absolute;
   left: 0;
-  top: 70px;
+  top: 80px;
   bottom: 0;
   overflow-y: scroll;
 
