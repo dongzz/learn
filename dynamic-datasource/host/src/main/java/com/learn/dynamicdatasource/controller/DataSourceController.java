@@ -2,7 +2,6 @@ package com.learn.dynamicdatasource.controller;
 
 import com.baomidou.dynamic.datasource.creator.DefaultDataSourceCreator;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
-import com.learn.dynamicdatasource.annotation.ChangeDataSource;
 import com.learn.dynamicdatasource.datasource.IDynamicDataSourceProvider;
 import com.learn.dynamicdatasource.entities.DynamicDataSource;
 import com.learn.dynamicdatasource.entities.dto.DataSourceDTO;
@@ -18,10 +17,6 @@ import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import javax.sql.DataSource;
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.List;
 import java.util.Map;
 
@@ -75,7 +70,6 @@ public class DataSourceController {
         return Res.success("删除成功");
     }
 
-    @ChangeDataSource
     @PostMapping("/select")
     @ApiOperation("动态查询")
     public Res select(String source, String sql) {
@@ -83,7 +77,7 @@ public class DataSourceController {
         if (dataSource == null) {
             return null;
         }
-        List<Map<String,Object>> list = dynamicDataSourceService.list(sql);
+        List<Map<String,Object>> list = dynamicDataSourceService.list(source, sql);
         return Res.success(list);
     }
 }

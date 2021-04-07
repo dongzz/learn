@@ -1,5 +1,6 @@
 package com.learn.dynamicdatasource.service.impl;
 
+import com.learn.dynamicdatasource.annotation.ChangeDataSource;
 import com.learn.dynamicdatasource.handler.DataSourceContextHolder;
 import com.learn.dynamicdatasource.service.DynamicDataSourceService;
 import lombok.extern.slf4j.Slf4j;
@@ -36,7 +37,8 @@ public class DynamicDataSourceServiceImpl implements DynamicDataSourceService {
     private SqlSessionTemplate sqlSessionTemplate;
 
     @Override
-    public List<Map<String, Object>> list(String sql) {
+    @ChangeDataSource
+    public List<Map<String, Object>> list(String source, String sql) {
         log.info(PREFIX_LOG+"执行查询sql:"+sql);
         List<Map<String, Object>> list = new ArrayList<>();
         PreparedStatement pst = null;

@@ -11,5 +11,6 @@ import java.util.Map;
  * @Date 2021/4/7 9:49 上午
  */
 public interface DynamicDataSourceService {
-    List<Map<String, Object>> list(String sql);
+
+    List<Map<String, Object>> list(String source, String sql);
 }
