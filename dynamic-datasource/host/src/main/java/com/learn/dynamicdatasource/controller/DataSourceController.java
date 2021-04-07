@@ -2,11 +2,12 @@ package com.learn.dynamicdatasource.controller;
 
 import com.baomidou.dynamic.datasource.creator.DefaultDataSourceCreator;
 import com.baomidou.dynamic.datasource.spring.boot.autoconfigure.DataSourceProperty;
+import com.learn.dynamicdatasource.annotation.ChangeDataSource;
 import com.learn.dynamicdatasource.datasource.IDynamicDataSourceProvider;
 import com.learn.dynamicdatasource.entities.DynamicDataSource;
 import com.learn.dynamicdatasource.entities.dto.DataSourceDTO;
-import com.learn.dynamicdatasource.handler.DataSourceContextHolder;
 import com.learn.dynamicdatasource.service.DataSourceService;
+import com.learn.dynamicdatasource.service.DynamicDataSourceService;
 import com.learn.dynamicdatasource.tools.Res;
 import io.swagger.annotations.Api;
 import io.swagger.annotations.ApiOperation;
@@ -22,6 +23,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 /**
  * @author dz <895180729@qq.com>
@@ -44,10 +46,12 @@ public class DataSourceController {
     @Resource(name = "dataSourceServiceImpl")
     DataSourceService dataSourceService;
 
+    @Resource(name = "dynamicDataSourceServiceImpl")
+    DynamicDataSourceService dynamicDataSourceService;
+
     @GetMapping(value = "/list")
     @ApiOperation("获取当前所有数据源")
     public Res list() {
-        DataSourceContextHolder.setDataSource(dynamicDataSource.get("3307"));
         List<DynamicDataSource> list = dataSourceService.list();
         return Res.success(list);
     }
@@ -71,16 +75,15 @@ public class DataSourceController {
         return Res.success("删除成功");
     }
 
+    @ChangeDataSource
     @PostMapping("/select")
     @ApiOperation("动态查询")
-    public DataSource select(String source, String sql) throws SQLException {
+    public Res select(String source, String sql) {
         DataSource dataSource = dynamicDataSource.get(source);
         if (dataSource == null) {
             return null;
         }
-        Connection connection = dataSource.getConnection();
-        PreparedStatement preparedStatement = connection.prepareStatement(sql);
-        ResultSet resultSet = preparedStatement.executeQuery();
-        return null;
+        List<Map<String,Object>> list = dynamicDataSourceService.list(sql);
+        return Res.success(list);
     }
 }

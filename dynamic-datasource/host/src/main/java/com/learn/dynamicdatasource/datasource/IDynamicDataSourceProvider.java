@@ -41,7 +41,7 @@ public class IDynamicDataSourceProvider extends AbstractDataSourceProvider {
 
     @Override
     public Map<String, DataSource> loadDataSources() {
-        if (dataSourceMap.isEmpty()) {
+        if (dataSourceMap == null) {
             Connection conn = null;
             Statement stmt = null;
             try {
@@ -76,6 +76,10 @@ public class IDynamicDataSourceProvider extends AbstractDataSourceProvider {
 
     public DataSource remove(String name) {
         return dataSourceMap.remove(masterDatasource.equals(name) ? name : (dynamicDatasourcePrefix + name));
+    }
+
+    public boolean containsKey(String name) {
+        return dataSourceMap.containsKey(masterDatasource.equals(name) ? name : (dynamicDatasourcePrefix + name));
     }
 
     private Map<String, DataSourceProperty> executeStmt(Statement statement) throws SQLException {
