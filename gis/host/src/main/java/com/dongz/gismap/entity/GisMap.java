@@ -5,6 +5,8 @@ import com.baomidou.mybatisplus.annotation.TableField;
 import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
+
+import com.vividsolutions.jts.geom.Geometry;
 import lombok.Data;
 
 /**
@@ -13,7 +15,7 @@ import lombok.Data;
  */
 @TableName(value ="v6_time_cnty_pts_utf_wgs84")
 @Data
-public class Map implements Serializable {
+public class GisMap implements Serializable {
     /**
      * 
      */
@@ -23,7 +25,7 @@ public class Map implements Serializable {
     /**
      * 
      */
-    private Object geom;
+    private Geometry geom;
 
     /**
      * 

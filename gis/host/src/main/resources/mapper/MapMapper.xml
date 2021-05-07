@@ -4,9 +4,9 @@
         "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
 <mapper namespace="com.dongz.gismap.mapper.MapMapper">
 
-    <resultMap id="BaseResultMap" type="map">
+    <resultMap id="BaseResultMap" type="com.dongz.gismap.entity.GisMap">
             <id property="id" column="id" jdbcType="INTEGER"/>
-            <result property="geom" column="geom" jdbcType="OTHER"/>
+            <result property="geom" column="geom" typeHandler="com.dongz.gismap.handler.GeometryTypeHandler"/>
             <result property="namePy" column="name_py" jdbcType="VARCHAR"/>
             <result property="nameCh" column="name_ch" jdbcType="VARCHAR"/>
             <result property="nameFt" column="name_ft" jdbcType="VARCHAR"/>

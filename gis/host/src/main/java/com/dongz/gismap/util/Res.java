@@ -1,7 +1,5 @@
 package com.dongz.gismap.util;
 
-import lombok.AllArgsConstructor;
-
 /**
  * @author dz <895180729@qq.com>
  * @Description
@@ -9,11 +7,16 @@ import lombok.AllArgsConstructor;
  * @Since 1.8
  * @Date 2021/5/7 11:36 上午
  */
-@AllArgsConstructor
 public class Res {
     private Integer code;
     private String msg;
     private Object data;
+
+    public Res(Integer code, String msg, Object data) {
+        this.code = code;
+        this.msg = msg;
+        this.data = data;
+    }
 
     public static Res success() {
         return success("ok");

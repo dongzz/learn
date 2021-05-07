@@ -14,7 +14,7 @@ import lombok.ToString;
 @Getter
 @Setter
 @ToString
-public class MapVO {
+public class GISMapVO {
     private Integer gId;
     private String nameCh;
 }
