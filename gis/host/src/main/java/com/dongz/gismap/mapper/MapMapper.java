@@ -15,4 +15,6 @@ public interface MapMapper extends BaseMapper<GisMap> {
 
 
     List<GISMapVO> selectVOList();
+
+    List<GisMap> getDynastyGeometry(String category, Integer start, Integer end);
 }

@@ -32,6 +32,16 @@
             <result property="endChgTy" column="end_chg_ty" jdbcType="VARCHAR"/>
     </resultMap>
 
+    <sql id="CNTY_PTS">
+        v6_time_cnty_pts_utf_wgs84
+    </sql>
+    <sql id="PREF_PTS">
+        v6_time_pref_pts_utf_wgs84
+    </sql>
+    <sql id="PREF_PGN">
+        v6_time_pref_pgn_utf_wgs84
+    </sql>
+
     <sql id="Base_Column_List">
         id,geom,name_py,
         name_ch,name_ft,x_coor,
@@ -46,5 +56,19 @@
     <select id="selectVOList" resultType="com.dongz.gismap.entity.vo.GISMapVO">
         select id,geom,name_ch
         from v6_time_cnty_pts_utf_wgs84 limit 1
+    </select>
+    <select id="getDynastyGeometry" resultType="com.dongz.gismap.entity.GisMap" parameterType="string">
+        select <include refid="Base_Column_List"/>
+        from
+            <if test="category == 'cntypts'">
+                <include refid="CNTY_PTS"></include>
+            </if>
+            <if test="category == 'prefpts'">
+                <include refid="PREF_PTS"></include>
+            </if>
+            <if test="category == 'prefpgn'">
+                <include refid="PREF_PGN"></include>
+            </if>
+        where (beg_yr &gt;= #{start} and beg_yr &lt;= #{end}) or (end_yr &gt;= #{start} and end_yr &lt;= #{end})
     </select>
 </mapper>

@@ -10,6 +10,7 @@ import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
@@ -31,9 +32,9 @@ public class MapController {
     @Resource
     MapService mapService;
 
-    @GetMapping(value = "/list")
-    public Res list() {
-        List<GisMap> list = mapService.list();
+    @GetMapping("/geometry")
+    public Res getPoint(@RequestParam("category") String category, @RequestParam("start") Integer start, @RequestParam("end") Integer end){
+        List<GisMap> list = mapService.getDynastyGeom(category,start,end);
         JSONArray collect = list.stream().map(g -> {
             JSONObject geom = new JSONObject();
             geom.put("id", g.getId());

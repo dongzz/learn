@@ -12,4 +12,6 @@ import java.util.List;
 public interface MapService extends IService<GisMap> {
 
     List<GISMapVO> listVO();
+
+    List<GisMap> getDynastyGeom(String category, Integer start, Integer end);
 }
