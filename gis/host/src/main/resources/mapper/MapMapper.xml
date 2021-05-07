@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+        PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+        "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.dongz.gismap.mapper.MapMapper">
+
+    <resultMap id="BaseResultMap" type="map">
+            <id property="id" column="id" jdbcType="INTEGER"/>
+            <result property="geom" column="geom" jdbcType="OTHER"/>
+            <result property="namePy" column="name_py" jdbcType="VARCHAR"/>
+            <result property="nameCh" column="name_ch" jdbcType="VARCHAR"/>
+            <result property="nameFt" column="name_ft" jdbcType="VARCHAR"/>
+            <result property="xCoor" column="x_coor" jdbcType="DOUBLE"/>
+            <result property="yCoor" column="y_coor" jdbcType="DOUBLE"/>
+            <result property="presLoc" column="pres_loc" jdbcType="VARCHAR"/>
+            <result property="typePy" column="type_py" jdbcType="VARCHAR"/>
+            <result property="typeCh" column="type_ch" jdbcType="VARCHAR"/>
+            <result property="levRank" column="lev_rank" jdbcType="VARCHAR"/>
+            <result property="begYr" column="beg_yr" jdbcType="BIGINT"/>
+            <result property="begRule" column="beg_rule" jdbcType="VARCHAR"/>
+            <result property="endYr" column="end_yr" jdbcType="BIGINT"/>
+            <result property="endRule" column="end_rule" jdbcType="VARCHAR"/>
+            <result property="noteId" column="note_id" jdbcType="BIGINT"/>
+            <result property="objType" column="obj_type" jdbcType="VARCHAR"/>
+            <result property="sysId" column="sys_id" jdbcType="BIGINT"/>
+            <result property="geoSrc" column="geo_src" jdbcType="VARCHAR"/>
+            <result property="compiler" column="compiler" jdbcType="VARCHAR"/>
+            <result property="gecomplr" column="gecomplr" jdbcType="VARCHAR"/>
+            <result property="checker" column="checker" jdbcType="VARCHAR"/>
+            <result property="entDate" column="ent_date" jdbcType="VARCHAR"/>
+            <result property="begChgTy" column="beg_chg_ty" jdbcType="VARCHAR"/>
+            <result property="endChgTy" column="end_chg_ty" jdbcType="VARCHAR"/>
+    </resultMap>
+
+    <sql id="Base_Column_List">
+        id,geom,name_py,
+        name_ch,name_ft,x_coor,
+        y_coor,pres_loc,type_py,
+        type_ch,lev_rank,beg_yr,
+        beg_rule,end_yr,end_rule,
+        note_id,obj_type,sys_id,
+        geo_src,compiler,gecomplr,
+        checker,ent_date,beg_chg_ty,
+        end_chg_ty
+    </sql>
+</mapper>
