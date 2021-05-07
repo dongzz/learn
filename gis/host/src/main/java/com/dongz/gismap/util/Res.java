@@ -1,8 +1,5 @@
 package com.dongz.gismap.util;
 
-import lombok.Data;
-import lombok.Getter;
-
 import java.io.Serializable;
 
 /**
