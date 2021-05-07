@@ -8,12 +8,15 @@ import com.dongz.gismap.service.MapService;
 import com.dongz.gismap.util.Res;
 import com.vividsolutions.jts.geom.Coordinate;
 import com.vividsolutions.jts.geom.Geometry;
+import org.geotools.geojson.geom.GeometryJSON;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.annotation.Resource;
+import java.io.IOException;
+import java.io.StringWriter;
 import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -35,6 +38,7 @@ public class MapController {
     @GetMapping("/geometry")
     public Res getPoint(@RequestParam("category") String category, @RequestParam("start") Integer start, @RequestParam("end") Integer end){
         List<GisMap> list = mapService.getDynastyGeom(category,start,end);
+        GeometryJSON geometryJSON=new GeometryJSON();
         JSONArray collect = list.stream().map(g -> {
             JSONObject geom = new JSONObject();
             geom.put("id", g.getId());
@@ -56,23 +60,16 @@ public class MapController {
             geom.put("entdate", g.getEntDate());
             geom.put("begchgty", g.getBegChgTy());
             geom.put("endchgty", g.getEndChgTy());
-            geom.put("geometry", geometryToJson(g.getGeom()));
+            StringWriter writer = new StringWriter();
+            try {
+                geometryJSON.write(g.getGeom(),writer);
+                geom.put("geometry", JSONObject.parse(writer.toString()));
+            } catch (IOException e) {
+                e.printStackTrace();
+                geom.put("geometry", null);
+            }
             return geom;
         }).collect(Collectors.toCollection(JSONArray::new));
         return Res.success(collect);
-    }
-
-    private JSONObject geometryToJson(Geometry geometry){
-        JSONObject jsonObject=new JSONObject();
-        jsonObject.put("type",geometry.getGeometryType());
-        JSONArray coorList = Arrays.stream(geometry.getCoordinates()).map(c -> {
-            JSONObject jsonObjectCoor = new JSONObject();
-            jsonObjectCoor.put("lng", c.x);
-            jsonObjectCoor.put("lat", c.y);
-            return jsonObjectCoor;
-        }).collect(Collectors.toCollection(JSONArray::new));
-
-        jsonObject.put("coordinates",coorList);
-        return jsonObject;
     }
 }
