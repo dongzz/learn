@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import java.io.Serializable;
 
+import com.dongz.gismap.handler.GeometryTypeHandler;
 import com.vividsolutions.jts.geom.Geometry;
 import lombok.Data;
 
@@ -13,7 +14,7 @@ import lombok.Data;
  * 
  * @TableName v6_time_cnty_pts_utf_wgs84
  */
-@TableName(value ="v6_time_cnty_pts_utf_wgs84")
+@TableName(value ="v6_time_cnty_pts_utf_wgs84", autoResultMap = true)
 @Data
 public class GisMap implements Serializable {
     /**
@@ -25,6 +26,7 @@ public class GisMap implements Serializable {
     /**
      * 
      */
+    @TableField(typeHandler = GeometryTypeHandler.class)
     private Geometry geom;
 
     /**

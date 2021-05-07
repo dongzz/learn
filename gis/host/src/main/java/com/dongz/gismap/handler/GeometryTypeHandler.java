@@ -5,6 +5,7 @@ import com.vividsolutions.jts.io.ParseException;
 import com.vividsolutions.jts.io.WKBReader;
 import org.apache.ibatis.type.BaseTypeHandler;
 import org.apache.ibatis.type.JdbcType;
+import org.apache.ibatis.type.MappedJdbcTypes;
 import org.apache.ibatis.type.MappedTypes;
 import org.postgresql.util.PGobject;
 
@@ -21,6 +22,7 @@ import java.sql.SQLException;
  * @Date 2021/5/7 2:01 下午
  */
 @MappedTypes(Geometry.class)
+@MappedJdbcTypes(JdbcType.OTHER)
 public class GeometryTypeHandler extends BaseTypeHandler<Geometry> {
 
     @Override

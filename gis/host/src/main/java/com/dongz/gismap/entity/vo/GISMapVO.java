@@ -1,5 +1,7 @@
 package com.dongz.gismap.entity.vo;
 
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.dongz.gismap.handler.GeometryTypeHandler;
 import com.vividsolutions.jts.geom.Geometry;
 
 import java.io.Serializable;
@@ -14,6 +16,7 @@ import java.io.Serializable;
 public class GISMapVO implements Serializable {
     private Integer id;
     private String nameCh;
+    @TableField(typeHandler = GeometryTypeHandler.class)
     private Geometry geom;
 
     public Integer getId() {
