@@ -43,4 +43,8 @@
         checker,ent_date,beg_chg_ty,
         end_chg_ty
     </sql>
+    <select id="selectVOList" resultType="com.dongz.gismap.entity.vo.GISMapVO">
+        select id,geom,name_ch
+        from v6_time_cnty_pts_utf_wgs84 limit 100
+    </select>
 </mapper>

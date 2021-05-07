@@ -1,6 +1,6 @@
 package com.dongz.gismap.controller;
 
-import com.dongz.gismap.entity.GisMap;
+import com.dongz.gismap.entity.vo.GISMapVO;
 import com.dongz.gismap.service.MapService;
 import com.dongz.gismap.util.Res;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,9 +24,9 @@ public class MapController {
     @Resource
     MapService mapService;
 
-    @GetMapping("/list")
+    @GetMapping(value = "/list")
     public Res list() {
-        List<GisMap> list = mapService.list();
+        List<GISMapVO> list = mapService.listVO();
         return Res.success(list);
     }
 }
