@@ -1,6 +1,5 @@
 package com.dongz.gismap.service.impl;
 
-import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.extension.service.impl.ServiceImpl;
 import com.dongz.gismap.entity.GisMap;
 import com.dongz.gismap.entity.vo.GISMapVO;
