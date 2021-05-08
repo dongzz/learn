@@ -1,30 +1,47 @@
 <template>
-  <div id="nav">
-    <router-link to="/">Home</router-link> |
-    <router-link to="/about">About</router-link>
+  <div id="app">
+    <el-container>
+      <el-header class="header">
+        <vheader />
+      </el-header>
+      <el-container>
+        <el-main class="el-main">
+          <router-view></router-view>
+        </el-main>
+      </el-container>
+    </el-container>
   </div>
-  <router-view/>
 </template>
-
+<script>
+import Header from '@/components/Header'
+export default {
+  name: 'app',
+  components: {
+    'vheader': Header
+  }
+}
+</script>
 <style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
+.header {
+  background-color: #c00000;
+  color: #fff;
+  line-height: 60px;
+}
+.el-main {
+  background-color: #E9EEF3;
+  color: #333;
   text-align: center;
-  color: #2c3e50;
+  line-height: 160px;
+  height: 100%;
 }
-
-#nav {
-  padding: 30px;
+/*更改全局的滚动条样式*/
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+  background-color: #fff;
 }
-
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
-}
-
-#nav a.router-link-exact-active {
-  color: #42b983;
+::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 6px rgba(0, 0, 0, .3);
+  background-color: rgba(0, 0, 0, .1)
 }
 </style>
