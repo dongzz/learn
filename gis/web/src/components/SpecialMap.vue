@@ -6,7 +6,7 @@
 </template>
 
 <script>
-import axios from 'axios'
+import { getGeometry } from '@/api'
 
 export default {
   data() {
@@ -16,21 +16,13 @@ export default {
   },
   methods: {
     getdata() {
-
-      axios.get('http://localhost:8081/map/geometry?category=cntypts&start=-5000&end=-221').then((response) => {
-
+      getGeometry().then((response) => {
         this.axiosdata = response.data
-
         console.log(response.data)
-
       }).catch((response) => {
-
         console.log(response)
-
       })
-
     }
-
   },
 
   mounted() {

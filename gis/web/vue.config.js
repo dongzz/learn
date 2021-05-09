@@ -31,15 +31,15 @@ module.exports = {
         https: false,
         hotOnly: false,
         open: true, //配置自动启动浏览器
-        proxy: {// 配置多个代理(配置一个 proxy: 'http://localhost:4000' )
+        proxy: {
             '/api': {
                 target: 'http://localhost:8081/',
-                ws: true,
                 changeOrigin: true,
-                rewrites: '/api'
-            }
+                pathRewrite: {
+                    '^/api': '/'
+                }
+            },
         }
-
     },
     chainWebpack: config => {
         // 修复HMR
