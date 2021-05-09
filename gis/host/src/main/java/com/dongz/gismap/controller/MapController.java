@@ -3,21 +3,14 @@ package com.dongz.gismap.controller;
 import com.alibaba.fastjson.JSONArray;
 import com.alibaba.fastjson.JSONObject;
 import com.dongz.gismap.entity.GisMap;
-import com.dongz.gismap.entity.vo.GISMapVO;
 import com.dongz.gismap.service.MapService;
 import com.dongz.gismap.util.Res;
-import com.vividsolutions.jts.geom.Coordinate;
-import com.vividsolutions.jts.geom.Geometry;
 import org.geotools.geojson.geom.GeometryJSON;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestParam;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import javax.annotation.Resource;
 import java.io.IOException;
 import java.io.StringWriter;
-import java.util.Arrays;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -36,6 +29,7 @@ public class MapController {
     MapService mapService;
 
     @GetMapping("/geometry")
+    @CrossOrigin
     public Res getPoint(@RequestParam("category") String category, @RequestParam("start") Integer start, @RequestParam("end") Integer end){
         List<GisMap> list = mapService.getDynastyGeom(category,start,end);
         GeometryJSON geometryJSON=new GeometryJSON();
