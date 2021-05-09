@@ -1,16 +1,12 @@
 <template>
-  <div id="app">
-    <el-container>
-      <el-header class="header">
-        <vheader />
-      </el-header>
-      <el-container>
-        <el-main class="el-main">
-          <router-view></router-view>
-        </el-main>
-      </el-container>
-    </el-container>
-  </div>
+  <el-container style="height: 100%">
+    <el-header class="header">
+      <vheader />
+    </el-header>
+    <el-main class="el-main">
+      <router-view></router-view>
+    </el-main>
+  </el-container>
 </template>
 <script>
 import Header from '@/components/Header'
@@ -22,6 +18,9 @@ export default {
 }
 </script>
 <style>
+html,body,#app{
+  height: 100%;
+}
 .header {
   background-color: #c00000;
   color: #fff;

@@ -1,8 +1,8 @@
 <template>
   <div>
-    <div style="background-color: #fff; height: 75vh;width: 200px;float:left;">
-      <el-scrollbar style="height: 100%;">
-        <el-tree :data="treedata" show-checkbox node-key="id" :props="defaultProps" @check="changecheck">
+    <div style="background-color: #fff; max-height: 75vh;overflow: scroll;width: 200px;float:left;padding: 10px">
+      <el-scrollbar>
+        <el-tree :data="treedata" show-checkbox node-key="id" :props="defaultProps" default-expand-all @check="changecheck">
         </el-tree>
       </el-scrollbar>
     </div>
