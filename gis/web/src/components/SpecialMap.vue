@@ -3,7 +3,7 @@
     <div id="map">map</div>
     <div style="background-color: #fff; height: 100vh;width: 15%;position:absolute;left:0px;">
       <el-scrollbar style="height: 100%;">
-        <el-tree :data="treedata" show-checkbox node-key="id" :props="defaultProps" @check="changecheck">
+        <el-tree :data="treedata" show-checkbox node-key="id" :props="defaultProps" @check="changecheck" default-expand-all>
         </el-tree>
       </el-scrollbar>
     </div>
@@ -19,7 +19,6 @@ import { getGeometry } from '@/api'
 export default {
   data() {
     return {
-      map: null,
       defaultProps: {
         children: 'children',
         label: 'label'
@@ -29,7 +28,7 @@ export default {
   },
   methods: {
     initLeaflet() {
-      this.map = L.map('map', {
+      window.map = L.map('map', {
         center: [36.0, 114.0],
         zoom: 4,
         maxZoom: 23,
@@ -49,17 +48,17 @@ export default {
         getUrlArgs: getUrlArgs
       }
       const txMap = new TXTileLayer(txurl, options)
-      txMap.addTo(this.map)
+      txMap.addTo(window.map)
     },
     changecheck(e, data) {
       if (e['level'] === 1) {
         e['ischeck'] = !e['ischeck'];
-        for (let i = 0; i < e['children'].length; i++) {
-          e['children'][i]['ischeck'] = e['ischeck'];
-          for (let j = 0; j < e['children'][i]['children'].length; j++) {
-            e['children'][i]['children'][j]['ischeck'] = e['ischeck'];
-          }
-        }
+        e['children'].forEach(o => {
+          o['ischeck'] = e['ischeck']
+          o['children'].forEach(p => {
+            p['ischeck'] = e['ischeck']
+          })
+        })
       } else if (e['level'] === 2) {
         e['ischeck'] = !e['ischeck'];
         e['children'][0]['ischeck'] = e['ischeck'];
@@ -73,11 +72,11 @@ export default {
     },
     getdata() {
       //这步是把除底图外的所有覆盖物清空。
-      for (let a in this.map._layers) {
-        if (!this.map._layers[a]._container) {
-          this.map.removeLayer(this.map._layers[a])
+      for (let a in window.map._layers) {
+        if (!window.map._layers[a]._container) {
+          window.map.removeLayer(window.map._layers[a])
         }
-      };
+      }
       const dynastylist = this.treedata[0]['children']
       //定义黑点
       const blackIcon = L.icon({
@@ -99,141 +98,129 @@ export default {
       const polygonlist = [];
       const prefpgnindexlist=[];
       //prefpgn
-      for (let i = 0; i < dynastylist.length; i++) {
-        if (dynastylist[i]['children'][2]['ischeck'] == true) {
-          const dynastypolygon = [];
-          const polygonindex = 0;
-          let params = {
-            category: 'prefpgn',
-            start: dynastylist[i]['timerange'][0],
-            end: dynastylist[i]['timerange'][1]
-          }
-          getGeometry(params).then((response) => {
-            const prefpgnlist = response.data['list']
-            for (let j = 0; j < prefpgnlist.length; j++) {
-              if(prefpgnindexlist.indexOf(prefpgnlist[j]['gid'])>0){
-                continue;
-              }
-              prefpgnindexlist.push(prefpgnlist[j]['gid']);
-              const mutlipolygon = prefpgnlist[j]['geometry']['coordinates'];
-              for (let m = 0; m < mutlipolygon.length; m++) {
-                const polygonpath = [];
-                const polygon = mutlipolygon[m];
-                for (let n = 0; n < polygon.length; n++) {
-                  const ringpath = [];
-                  const ring = polygon[n];
-                  for (let p = 0; p < ring.length; p++) {
-                    ringpath.push([ring[p][1], ring[p][0]])
-                  }
-                  polygonpath.push(ringpath);
-                }
-                dynastypolygon[polygonindex] = L.polygon(polygonpath, {
-                  color: '#C00000',
-                  fillColor: '#C00000',
-                  fillOpacity: 0.5
-                }).addTo(this.map);
-                dynastypolygon[polygonindex].bindTooltip(prefpgnlist[j]['namech']);
-                dynastypolygon[polygonindex].bindPopup('namech:' + prefpgnlist[j]['namech'] +
-                    '<br>nameft:' + prefpgnlist[j]['nameft'] +
-                    '<br>namepy:' + prefpgnlist[j]['namepy'] +
-                    '<br>typech:' + prefpgnlist[j]['typech'] +
-                    '<br>presloc:' + prefpgnlist[j]['presloc'] +
-                    '<br>begyr:' + prefpgnlist[j]['begyr'] +
-                    '<br>begrule:' + prefpgnlist[j]['begrule'] +
-                    '<br>begchgty:' + prefpgnlist[j]['begchgty'] +
-                    '<br>endyr:' + prefpgnlist[j]['endyr'] +
-                    '<br>endrule:' + prefpgnlist[j]['endrule'] +
-                    '<br>endchgty:' + prefpgnlist[j]['endchgty'] +
-                    '<br>geosrc:' + prefpgnlist[j]['geosrc'] +
-                    '<br>compiler:' + prefpgnlist[j]['compiler'] +
-                    '<br>gecomplr:' + prefpgnlist[j]['gecomplr'] +
-                    '<br>checker:' + prefpgnlist[j]['checker']
-                );
-                let polygonindex = polygonindex + 1;
-                polygonlist.push(dynastypolygon[polygonindex]);
-              }
-            };
-          }).catch((response) => {
-            console.log(response)
-          })
+      dynastylist.filter(o => o['children'][2]['ischeck']).forEach(o => {
+        const dynastypolygon = [];
+        let polygonindex = 0;
+        let params = {
+          category: 'prefpgn',
+          start: o['timerange'][0],
+          end: o['timerange'][1]
         }
-      }
-// console.log(prefpgnindexlist);
-//prefpts
-      for (let i = 0; i < dynastylist.length; i++) {
-        if (dynastylist[i]['children'][1]['ischeck'] == true) {
-          const dynastypoint = [];
-          let params = {
-            category: 'prefpts',
-            start: dynastylist[i]['timerange'][0],
-            end: dynastylist[i]['timerange'][1]
-          }
-          getGeometry(params).then((response) => {
+        getGeometry(params).then((response) => {
+          const prefpgnlist = response.data.data
 
-            const prefptslist = response.data['list']
+          prefpgnlist.filter(p => !prefpgnindexlist.includes(p['gid'])).forEach(p => {
+            prefpgnindexlist.push(p['gid']);
+            const mutlipolygon = p['geometry']['coordinates'];
+            mutlipolygon.forEach(q => {
+              const polygonpath = [];
+              q.forEach(e => {
+                const ringpath = [];
+                e.forEach(r => ringpath.push([r[1], r[0]]))
+                polygonpath.push(ringpath);
+              })
 
-            for (let j = 0; j < prefptslist.length; j++) {
-
-              if(prefptsindexlist.indexOf(prefptslist[j]['gid'])>0){
-
-                continue;
-
-              }
-
-              prefptsindexlist.push(prefptslist[j]['gid']);
-
-
-
-              dynastypoint[j] = new L.marker([prefptslist[j]['geometry']['coordinates'][1], prefptslist[j]['geometry']['coordinates'][0]], { icon: redIcon, title: prefptslist[j]['namech'] });
-
-              dynastypoint[j].addTo(this.map);
-
-              redpointlist.push(dynastypoint[j]);
-
-              dynastypoint[j].bindPopup('namech:' + prefptslist[j]['namech'] +
-
-                  '<br>nameft:' + prefptslist[j]['nameft'] +
-
-                  '<br>namepy:' + prefptslist[j]['namepy'] +
-
-                  '<br>typech:' + prefptslist[j]['typech'] +
-
-                  '<br>presloc:' + prefptslist[j]['presloc'] +
-
-                  '<br>begyr:' + prefptslist[j]['begyr'] +
-
-                  '<br>begrule:' + prefptslist[j]['begrule'] +
-
-                  '<br>begchgty:' + prefptslist[j]['begchgty'] +
-
-                  '<br>endyr:' + prefptslist[j]['endyr'] +
-
-                  '<br>endrule:' + prefptslist[j]['endrule'] +
-
-                  '<br>endchgty:' + prefptslist[j]['endchgty'] +
-
-                  '<br>geosrc:' + prefptslist[j]['geosrc'] +
-
-                  '<br>compiler:' + prefptslist[j]['compiler'] +
-
-                  '<br>gecomplr:' + prefptslist[j]['gecomplr'] +
-
-                  '<br>checker:' + prefptslist[j]['checker']
-
+              dynastypolygon[polygonindex] = L.polygon(polygonpath, {
+                color: '#C00000',
+                fillColor: '#C00000',
+                fillOpacity: 0.5
+              }).addTo(window.map);
+              dynastypolygon[polygonindex].bindTooltip(p['namech']);
+              dynastypolygon[polygonindex].bindPopup('namech:' + p['namech'] +
+                  '<br>nameft:' + p['nameft'] +
+                  '<br>namepy:' + p['namepy'] +
+                  '<br>typech:' + p['typech'] +
+                  '<br>presloc:' + p['presloc'] +
+                  '<br>begyr:' + p['begyr'] +
+                  '<br>begrule:' + p['begrule'] +
+                  '<br>begchgty:' + p['begchgty'] +
+                  '<br>endyr:' + p['endyr'] +
+                  '<br>endrule:' + p['endrule'] +
+                  '<br>endchgty:' + p['endchgty'] +
+                  '<br>geosrc:' + p['geosrc'] +
+                  '<br>compiler:' + p['compiler'] +
+                  '<br>gecomplr:' + p['gecomplr'] +
+                  '<br>checker:' + p['checker']
               );
-
-            };
-
-          }).catch((response) => {
-
-            console.log(response)
-
+              polygonindex = polygonindex + 1;
+              polygonlist.push(dynastypolygon[polygonindex]);
+            })
           })
-
+        }).catch((response) => {
+          console.log(response)
+        })
+      })
+      // console.log(prefpgnindexlist);
+      //prefpts
+      dynastylist.filter(o => o['children'][1]['ischeck']).forEach(o => {
+        const dynastypoint = [];
+        let params = {
+          category: 'prefpts',
+          start: dynastylist[i]['timerange'][0],
+          end: dynastylist[i]['timerange'][1]
         }
+        getGeometry(params).then((response) => {
 
-      }
+          const prefptslist = response.data.data
 
+          for (let j = 0; j < prefptslist.length; j++) {
+
+            if(prefptsindexlist.indexOf(prefptslist[j]['gid'])>0){
+
+              continue;
+
+            }
+
+            prefptsindexlist.push(prefptslist[j]['gid']);
+
+
+
+            dynastypoint[j] = new L.marker([prefptslist[j]['geometry']['coordinates'][1], prefptslist[j]['geometry']['coordinates'][0]], { icon: redIcon, title: prefptslist[j]['namech'] });
+
+            dynastypoint[j].addTo(window.map);
+
+            redpointlist.push(dynastypoint[j]);
+
+            dynastypoint[j].bindPopup('namech:' + prefptslist[j]['namech'] +
+
+                '<br>nameft:' + prefptslist[j]['nameft'] +
+
+                '<br>namepy:' + prefptslist[j]['namepy'] +
+
+                '<br>typech:' + prefptslist[j]['typech'] +
+
+                '<br>presloc:' + prefptslist[j]['presloc'] +
+
+                '<br>begyr:' + prefptslist[j]['begyr'] +
+
+                '<br>begrule:' + prefptslist[j]['begrule'] +
+
+                '<br>begchgty:' + prefptslist[j]['begchgty'] +
+
+                '<br>endyr:' + prefptslist[j]['endyr'] +
+
+                '<br>endrule:' + prefptslist[j]['endrule'] +
+
+                '<br>endchgty:' + prefptslist[j]['endchgty'] +
+
+                '<br>geosrc:' + prefptslist[j]['geosrc'] +
+
+                '<br>compiler:' + prefptslist[j]['compiler'] +
+
+                '<br>gecomplr:' + prefptslist[j]['gecomplr'] +
+
+                '<br>checker:' + prefptslist[j]['checker']
+
+            );
+
+          };
+
+        }).catch((response) => {
+
+          console.log(response)
+
+        })
+      })
 //cntypts
 
       for (let i = 0; i < dynastylist.length; i++) {
@@ -247,7 +234,7 @@ export default {
           }
           getGeometry(params).then((response) => {
 
-            const cntyptslist = response.data['list']
+            const cntyptslist = response.data.data
 
             for (let j = 0; j < cntyptslist.length; j++) {
 
@@ -261,7 +248,7 @@ export default {
 
               dynastypoint[j] = new L.marker([cntyptslist[j]['geometry']['coordinates'][1], cntyptslist[j]['geometry']['coordinates'][0]], { icon: blackIcon, title: cntyptslist[j]['namech'] });
 
-              dynastypoint[j].addTo(this.map);
+              dynastypoint[j].addTo(window.map);
 
               blackpointlist.push(dynastypoint[j]);
 
