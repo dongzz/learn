@@ -55,7 +55,8 @@
       "no-console": "off",
       "no-irregular-whitespace": "off",
       "no-debugger": "off",
-      "no-undef": "off"
+      "no-undef": "off",
+      "no-extra-semi": "off"
     }
   },
   "browserslist": [

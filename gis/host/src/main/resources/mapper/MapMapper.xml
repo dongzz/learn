@@ -45,12 +45,12 @@
     <sql id="Base_Column_List">
         id,geom,name_py,
         name_ch,name_ft,x_coor,
-        y_coor,pres_loc,type_py,
+        y_coor,type_py,
         type_ch,lev_rank,beg_yr,
         beg_rule,end_yr,end_rule,
         note_id,obj_type,sys_id,
-        geo_src,compiler,gecomplr,
-        checker,ent_date,beg_chg_ty,
+        geo_src,compiler,
+        checker,beg_chg_ty,
         end_chg_ty
     </sql>
     <select id="selectVOList" resultType="com.dongz.gismap.entity.vo.GISMapVO">

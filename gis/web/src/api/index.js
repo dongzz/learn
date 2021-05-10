@@ -1,5 +1,12 @@
-import http from '../utils/http'
+import request from '@/utils/request'
 
-export const getGeometry = () => {
-  return http.get('/api/map/geometry?category=cntypts&start=-5000&end=-221')
+/*
+ *客户列表
+ */
+export function getGeometry(data) {
+  return request({
+    url: '/api/map/geometry',
+    method: 'get',
+    params: data
+  })
 }
