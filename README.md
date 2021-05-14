@@ -20,3 +20,9 @@
 
 # dynamic-datasource
     动态数据源
+
+# gis
+    地理信息管理系统
+
+# oshi
+    cpu 内存 磁盘使用及模拟控制
