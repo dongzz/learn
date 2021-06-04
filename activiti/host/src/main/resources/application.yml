@@ -1,0 +1,46 @@
+server:
+  port: 8080
+
+spring:
+  datasource:
+    driverClassName: org.postgresql.Driver
+    url: jdbc:postgresql://localhost:5432/base?currentSchema=workflow&useSSL=false&allowMultiQueries=true
+    username: postgres
+    password: 123456
+
+activiti:
+  #不校验流程文件，默认是开启的
+  check-process-definitions: false
+  #是否使用activti自带的用户体系  activit自带用户表中可以没有数据但是表一定要存在
+  db-identity-used: true
+  #数据结构更新，默认是开启的，
+  database-schema-update: true
+  #保存历史数据级别设置为full最高级别，便于历史数据的追溯
+  #通过进入源码发现默认是audit级别 full最高级别
+  history-level: full
+
+  #自动创建、更新、验证数据库表结构
+  #扫描processes下的流程文件 ，通过源码发现默认是这样扫描的
+  process-definition-location-prefix: classpath:/processes/
+
+#mybatis
+mybatis-plus:
+  mapper-locations: classpath:/mapper/**/*.xml
+  #实体扫描，多个package用逗号或者分号分隔
+  global-config:
+    #数据库相关配置
+    db-config:
+      #主键类型  AUTO:"数据库ID自增", INPUT:"用户输入ID", ID_WORKER:"全局唯一ID (数字类型唯一ID)", UUID:"全局唯一ID UUID";
+      id-type: ID_WORKER
+      #字段策略 IGNORED:"忽略判断",NOT_NULL:"非 NULL 判断"),NOT_EMPTY:"非空判断"
+      field-strategy: NOT_NULL
+      #驼峰下划线转换
+      column-underline: true
+      #db-type: mysql
+    banner: false
+  #原生配置
+  configuration:
+    map-underscore-to-camel-case: true
+    cache-enabled: false
+    call-setters-on-nulls: true
+    jdbc-type-for-null: 'null'
